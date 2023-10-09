@@ -1,0 +1,71 @@
+import React, { useMemo, useState } from 'react';
+import './App.css';
+import { BarChart, ColumnChart, ExecuteQuery, MemberFilterTile, useExecuteQuery} from "@sisense/sdk-ui";
+import {Filter, Data, measures } from "@sisense/sdk-data";
+import * as DM from "./ordersdb";
+
+
+
+
+function App() {
+
+  const [categoryFilter, setCategoryFilter] = useState<Filter | null>(null);
+  const filters = useMemo(() => categoryFilter ? [categoryFilter] : [],  [categoryFilter]);
+  
+  console.log("App() State >>>>>", categoryFilter)
+
+  const { data , isLoading, isError } = useExecuteQuery({
+    dataSource: DM.DataSource,
+    dimensions : [ DM['CUSTOMERS1']['STATE'], DM['CUSTOMERS1']['CITY'] ] ,
+    measures : [measures.sum(DM.ORDER_DETAILS1.Amount, 'Amt')],
+    filters: [],
+  });
+
+  if (isLoading) {
+    console.log('useExecuteQuery() Loading 1');
+  }
+  if (isError) {
+    console.log('useExecuteQuery() Error 1');
+  }
+  if (data) {
+    console.log('useExecuteQuery() Data 1');
+  }
+
+ 
+
+  return (
+    <>
+       <MemberFilterTile
+        title={'State'}
+        dataSource={DM.DataSource}
+        attribute={DM['CUSTOMERS1']['STATE']}
+        filter={categoryFilter}
+        onChange={setCategoryFilter}
+      />
+
+      <ExecuteQuery
+        dataSource={DM.DataSource}
+        dimensions={[DM['CUSTOMERS1']['STATE'], DM['CUSTOMERS1']['CITY'] ]}
+        measures={[measures.sum(DM.ORDER_DETAILS1.Amount, 'Amt')]}
+        filters={[]}
+      >
+        {(data: Data) => {
+
+          if(data) {
+             console.log("Execute Query Data2:", data);
+          }
+
+          return <BarChart dataSet={data}
+                           dataOptions={{
+                             category: [{name: 'STATE', type: 'string'}],
+                             value: [{name: 'Amt'}],
+                             breakBy: []
+                           }}
+                  />;
+        }}
+      </ExecuteQuery>
+    </>
+  );
+}
+
+export default App;
