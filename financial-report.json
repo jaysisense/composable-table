@@ -1,0 +1,104 @@
+{
+    "groups" : [
+        {
+            "name" : "Location",
+            "expand" : "vertical",
+            "nest" : "y",
+            "position" : "A5",
+            "fields" : [
+                {
+                    "table" : "CUSTOMERS1",
+                    "column" : "Region",
+                    "background" : "#E0E0E0",
+                    "color" : "gray"
+                },
+                {
+                    "table" : "CUSTOMERS1",
+                    "column" : "STATE",
+                    "background" : "#F7F7F7",
+                    "color" : "gray"
+                }               
+            ]
+        },
+        {
+            "name" : "MonthName",
+            "expand" : "horizontal",
+            "nest" : "y",
+            "position" : "C1",
+            "fields" : [
+                {
+                    "table" : "ORDERS1",
+                    "column" : "MONTH_NAME",            
+                    "background" : "#E0E0E0",
+                    "color" : "gray",
+                    "values" : ["JAN","FEB","MAR", "APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
+                }                
+            ]
+        }      
+
+    ],
+
+    "measures" :[
+        {
+            "name" : "Amount",
+            "position" : "C5",
+            "formula" : "sum",
+            "groups" : ["Location","MonthName"],
+            "field" : {
+                    "table" : "ORDERS_DETAILS1",
+                    "column" : "Amount", 
+                    "background" : "#F5F5F5",
+                    "color" : "black"
+            }
+        },   
+        {
+            "name" : "VolumeMonthly",
+            "position" : "C2",
+            "formula" : "sum",
+            "groups" : ["MonthName"],
+            "field" : {
+                    "table" : "ORDERS_DETAILS1",
+                    "column" : "QUANTITY", 
+                    "background" : "#E0E0F5",
+                    "color" : "black"
+            }
+        },  
+        {
+            "name" : "AmountMonthly",
+            "position" : "C3",
+            "formula" : "sum",
+            "groups" : ["MonthName"],
+            "field" : {
+                    "table" : "ORDERS_DETAILS1",
+                    "column" : "Amount", 
+                    "background" : "#E0E0F5",
+                    "color" : "black"
+            }
+        }           
+    ],
+
+    "labels" : [
+        {
+            "label" : "Global Revenue",
+            "position" : "A3",
+            "background" : "#E0E0F5",
+            "color" : "grey",
+            "align" : "left"
+        },
+        {
+            "label" : "Global Volume",
+            "position" : "A2",
+            "background" : "#E0E0F5",
+            "color" : "grey",
+            "align" : "left"
+        },
+        {
+            "label" : "SPACE",
+            "position" : "B3",
+            "background" : "white",
+            "color" : "white",
+            "align" : "left"
+        }
+    ]
+
+}
